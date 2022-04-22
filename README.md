@@ -4,7 +4,7 @@ This folder contains the version of the pure html project, in another there will
 
 ## The Team
 - ### [Dario d'Abate](https://github.com/DariodAbate)<br/>dario.dabate@mail.polimi.it
-- ### [Marianna Dragoneti](https://github.com/Mariannadragonetti)<br/>marianna.dragonetti@mail.polimi.it
+- ### [Marianna Dragonetti](https://github.com/Mariannadragonetti)<br/>marianna.dragonetti@mail.polimi.it
 
 ## Languages
 - Java Enterprise Edition
