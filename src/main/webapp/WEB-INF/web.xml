@@ -1,12 +1,23 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
 http://xmlns.jcp.org/xml/ns/javaee/web-app_4_0.xsd" version="4.0">
-	<servlet>
-		<servlet-name>TestServlet</servlet-name>
-		<servlet-class>it.polimi.tiw.test.TestServlet</servlet-class>
-	</servlet>
-	<servlet-mapping>
-		<servlet-name>TestServlet</servlet-name>
-		<url-pattern>/</url-pattern>
-	</servlet-mapping>
+	<display-name>TIW-MEETING-MANAGEMENT-PURE-HTML</display-name>
+	<context-param>
+		<param-name>dbUrl</param-name>
+		<param-value>jdbc:mysql://localhost:3306/db_meeting_management_purehtml</param-value>
+	</context-param>
+	<context-param>
+		<param-name>dbUser</param-name>
+		<param-value>root</param-value>
+	</context-param>
+	<context-param>
+		<param-name>dbPassword</param-name>
+		<param-value>Dariodabate06</param-value>
+	</context-param>
+	<context-param>
+		<param-name>dbDriver</param-name>
+		<param-value>com.mysql.cj.jdbc.Driver</param-value>
+	</context-param>
+	<welcome-file-list>
+    <welcome-file>loginPage.html</welcome-file>
+  </welcome-file-list>
 </web-app>
