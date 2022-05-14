@@ -10,6 +10,7 @@ public class Meeting {
 	private Time time; //TODO capire se cambiare questo tipo per renderlo compatibile con Time di mysql
 	private int duration;
 	private int maxParticipant;
+	private boolean creator;
 	
 	public int getIdMeeting() {
 		return idMeeting;
@@ -57,6 +58,14 @@ public class Meeting {
 	
 	public void setMaxParticipant(int maxParticipant) {
 		this.maxParticipant = maxParticipant;
+	}
+
+	public boolean isCreator() {
+		return creator;
+	}
+
+	public void setCreator(boolean creator) {
+		this.creator = creator;
 	}
 
 }
