@@ -49,7 +49,6 @@ public class GetRegisteredUser extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		User user = (User) request.getSession().getAttribute("user");
 		
-		
 		UserDAO userDAO = new UserDAO(connection);
 		ArrayList<User> usersInvitable = new ArrayList<>();
 		
@@ -74,7 +73,7 @@ public class GetRegisteredUser extends HttpServlet {
 			ctx.setVariable("TooMuchSelection", request.getAttribute("oversizeSelection"));
 		}
 		
-		if(request.getAttribute("previousChoice") != null) {//error message that comes from CheckNumInvitation
+		if(request.getAttribute("previousChoice") != null) {//list of users selected that comes from CheckNumInvitation
 			ctx.setVariable("userPreviouslySelected", request.getAttribute("previousChoice"));
 		}
 		
@@ -82,11 +81,9 @@ public class GetRegisteredUser extends HttpServlet {
 	
 	}
 	
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		doGet(request, response);
+		doGet(request, response);//checkNumInvitation sends a post, we need to handle that request with a get method
 	}
-
 
 
 	public void destroy() {

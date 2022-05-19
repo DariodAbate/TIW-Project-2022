@@ -22,7 +22,7 @@ import it.polimi.tiw.dao.MeetingDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
 /**
- * Servlet implementation class CreateMeeting
+ * This servlet is used to save a meeting and the participants to it in the database.
  */
 @WebServlet("/CreateMeeting")
 public class CreateMeeting extends HttpServlet {
@@ -56,8 +56,7 @@ public class CreateMeeting extends HttpServlet {
 			response.sendRedirect(anagraphicPath);
 			return;
 		}	
-		
-		
+			
 		MeetingDAO meetingDAO = new MeetingDAO(connection);
 		//saving meeting
 		Meeting savedMeeting = (Meeting) session.getAttribute("meetingForm");
@@ -71,6 +70,11 @@ public class CreateMeeting extends HttpServlet {
 		
 		//saving participating of that meeting
 		ArrayList<Integer> userList = (ArrayList<Integer>) request.getAttribute("invitedPeople");
+		if(userList == null) {
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot save the participant for a meeting");
+			return;
+		}
+		
 		for(int idUser: userList) {
 			try {
 				meetingDAO.createParticipant(idUser, false);

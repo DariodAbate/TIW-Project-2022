@@ -22,10 +22,7 @@ import it.polimi.tiw.dao.MeetingDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
 /**
- * This servlet redirect a logged user in the Homepage. Thus, if the user is not logged or the session is invalid, redirect
- * a user to the login page.
- * In the variable "meetingsCreated" is stored a list of meetings created by the user.
- * In the variable "meetingsInvitedTo" is stored a list of meetings the user has been invited to.
+ * This servlet redirect a logged user in the Homepage. 
  */
 @WebServlet("/GoToHome")
 public class GoToHome extends HttpServlet {

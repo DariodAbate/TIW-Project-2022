@@ -49,8 +49,6 @@ public class SaveMeeting extends HttpServlet {
     	connection = ConnectionHandler.getConnection(context);
     }
     
-	
-
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		String title = request.getParameter("title");
 		String dateString = request.getParameter("date");
@@ -74,7 +72,6 @@ public class SaveMeeting extends HttpServlet {
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
 		cal.set(Calendar.MILLISECOND, 0);
-
 		
 		try {
 			date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
@@ -120,8 +117,6 @@ public class SaveMeeting extends HttpServlet {
 			return;//early return
 		}
 		
-		
-		
 		//parsing duration and maxParticipant
 		int duration = -1;
 		int maxParticipant = -1;
@@ -141,14 +136,12 @@ public class SaveMeeting extends HttpServlet {
 			return;//early return	
 		}
 		
-		
 		Meeting m = new Meeting();
 		m.setTitle(title);
 		m.setDate(date);
 		m.setTime(time);
 		m.setDuration(duration);
 		m.setMaxParticipant(maxParticipant);
-		
 		
 		// constructing new URI redirecting to anagraphic page
 		request.getSession().setAttribute("meetingForm", m);// save data from html form in session

@@ -25,7 +25,7 @@ import it.polimi.tiw.utils.ConnectionHandler;
  * This servlet is used to register a user to the application.
  * It checks the equality between the password fields and
  * the uniqueness of the username. 
- * Then, the user is redirected to the home page
+ * Then, the user has to login to the application
  */
 @WebServlet("/CheckRegistration")
 public class CheckRegistration extends HttpServlet {
@@ -62,7 +62,7 @@ public class CheckRegistration extends HttpServlet {
 		}
 		
 		String path;
-		if(!password.equals(repeatedPassword)) {//password are not equal
+		if(!password.equals(repeatedPassword)) {//passwords do not corresponds
 			path = "/loginPage.html";
 			
 			ServletContext servletContext = getServletContext();
@@ -92,9 +92,8 @@ public class CheckRegistration extends HttpServlet {
 				return;
 			}
 		}
-		
+		//saving user
 		User u = new User();
-		
 		try {
 			u.setUsername(usr);
 			u.setMail(mail);
@@ -107,7 +106,6 @@ public class CheckRegistration extends HttpServlet {
 			return;
 		}
 		
-		// constructing new URI redirecting to home page
 		path = getServletContext().getContextPath() + "/loginPage.html"; 
 		response.sendRedirect(path);
 		
