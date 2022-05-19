@@ -1,10 +1,34 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Anagraphic page</title>
 </head>
 <body>
+	<h3>Anagraphic page</h3>
+	<h3>Choose the users to invite</h3>
+	</p>
+	<div>
+		<form method="post" th:action="@{/CheckNumInvitation}">
+			<div th:each="user : ${userListInvitable}">
+				<br> <input th:name="${user.idUser}" type="checkbox" th:value="${user.idUser}"
+				th:checked = "${userPreviouslySelected != null} ? ${#lists.contains(userPreviouslySelected, user.idUser)} : ${false}">
+				<label th:text="${user.username}"> Username</label>			
+			</div>
+			<br> <input type="submit" value="invite">
+		</form>
+		<p th:text = "${notEnoughSelection}"> </p>
+		<p th:text = "${TooMuchSelection}"> </p>
+		<!--
+		#lists.contains(#session.getAttribute('oldSelection'), user)
+		
+		--->
+		
+	</div>
+
+
+
+
 
 </body>
 </html>

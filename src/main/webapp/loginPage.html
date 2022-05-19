@@ -1,10 +1,30 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Login page</title>
 </head>
 <body>
+	<h1>Welcome to the meetings management application</h1>
+	
+	<h4>Login</h4>	
+	<form method="post" action="CheckPassword">
+		<br> Username: <input name="username" type="text" required >
+		<br> Password: <input name="password" type="password" required> 
+		<br> <input type="submit" value="Sign in">
+		<p th:text = "${errorMessage}"> </p>
+	</form>
+	
+	<h4>Register</h4>	
+	<form method="post" action="CheckRegistration">
+		<br> Username: <input name="newUsername" type="text" required >
+		<br> Mail: <input name="newMail" type="email" required> <br>
+		<br> Password: <input name="newPassword" type="password" required >
+		<br> Repeat Password: <input name="newRepeatedPassword" type="password" required >
+		<br> <input type="submit" value="Sign up">
+		<p th:text = "${passwordsDifferent}"> </p>
+		<p th:text = "${nicknameAlreadyTaken}"> </p>
+	</form>
 
 </body>
 </html>

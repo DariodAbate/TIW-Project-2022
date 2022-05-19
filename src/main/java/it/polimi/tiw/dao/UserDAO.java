@@ -59,16 +59,40 @@ public class UserDAO {
 		}
 	}
 	
+	
 	/**
-	 * This method is used to get all the user except the one that is logged
+	 * This method is used to get all the users
+	 * @return list of registered users
+	 */
+	public ArrayList<User> findAllUsers() throws SQLException{
+		String query = "select idUser, username, mail FROM user ";
+		try(PreparedStatement pstatement = con.prepareStatement(query);){
+			try(ResultSet result = pstatement.executeQuery();){
+				ArrayList<User> temp = new ArrayList<>();
+				while(result.next()) {
+					User u = new User();
+					
+					u.setIdUser(result.getInt("idUser"));
+					u.setUsername(result.getString("username"));
+					u.setMail(result.getString("mail"));
+					
+					temp.add(u);
+				}
+				return temp;
+			}
+		}
+	}
+	
+	/**
+	 * This method is used to get all the users except the one that is logged
 	 * @param idUserCreator id of the user that is logged
 	 * @return list of user except that do not contain the one that is logged
 	 * @throws SQLException
 	 */
-	public ArrayList<User> findUsersExceptCreator(int idUserCreator) throws SQLException{
-		String query = "select idUser, username, mail FROM user WHERE idUser <> ?";
+	public ArrayList<User> findUsersExceptCreator(String usernameCreator) throws SQLException{
+		String query = "select idUser, username, mail FROM user WHERE username <> ?";
 		try(PreparedStatement pstatement = con.prepareStatement(query);){
-			pstatement.setInt(1, idUserCreator);
+			pstatement.setString(1, usernameCreator);
 			try(ResultSet result = pstatement.executeQuery();){
 				ArrayList<User> temp = new ArrayList<>();
 				while(result.next()) {

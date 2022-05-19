@@ -1,10 +1,81 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Home page</title>
 </head>
 <body>
+	<h3>Home page</h3>
+	
+	<h4>Meetings created by you</h4>
+	<table bgcolor="black">
+		<thead>
+			<tr bgcolor="grey">
+				<th>Title</th>
+				<th>Date</th>
+				<th>Time</th>
+				<th>Duration</th>
+				<th>Maximum participants</th>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:if="${meetingsCreated.empty}">
+				<td bgcolor="white" colspan="5" align="center">No meetings created by you</td>
+			</tr>
+			<tr th:each="meeting : ${meetingsCreated}" bgcolor="lightgrey" align="center">
+				<td><span th:text="${meeting.title}">Meeting's title</span></td>
+				<td><span th:text="${meeting.date}">Meeting's date</span></td>
+				<td><span th:text="${meeting.time}">Meeting's time</span></td>
+				<td><span th:text="${meeting.duration}">Meeting's duration</span></td>
+				<td><span th:text="${meeting.maxParticipant}">Meeting's maxParticipant</span></td>
+				
+			</tr>
+		</tbody>
+	</table>
+	
+	<h3>Meetings you have been invited to</h4>
+	<table bgcolor="black">
+		<thead>
+			<tr bgcolor="grey">
+				<th>Title</th>
+				<th>Date</th>
+				<th>Time</th>
+				<th>Duration</th>
+				<th>Maximum participants</th>
+				
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:if="${meetingsInvitedTo.empty}">
+				<td bgcolor="white" colspan="5" align="center">No meetings you have been invited to</td>
+			</tr>
+			<tr th:each="meeting : ${meetingsInvitedTo}" bgcolor="lightgrey" align="center">
+				<td><span th:text="${meeting.title}">Meeting's title</span></td>
+				<td><span th:text="${meeting.date}">Meeting's date</span></td>
+				<td><span th:text="${meeting.time}">Meeting's time</span></td>
+				<td><span th:text="${meeting.duration}">Meeting's duration</span></td>
+				<td><span th:text="${meeting.maxParticipant}">Meeting's maxParticipant</span></td>
+				
+			</tr>
+		</tbody>
+	</table>
+	
+	<h3>Create a meeting</h3>
+
+	<form method="post" th:action="@{/SaveMeeting}">
+		<br> Title: <input name="title" type="text" required>
+		<br> Date: <input name="date" type="date" required> 
+		<br> Time: <input name="time" type="time" required>
+		<br> Duration: <input name="duration" type="number" required>
+		<br> Max participant: <input name="maxPart" type="number" required>
+		<br> <input type="submit" value="create">
+	</form>
+
+	<p>
+		<a href="loginPage.html" th:href="@{/Logout}"> Back to the Login
+			Page </a>
+	</p>
 
 </body>
 </html>

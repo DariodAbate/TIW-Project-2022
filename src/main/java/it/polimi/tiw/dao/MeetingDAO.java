@@ -24,7 +24,7 @@ public class MeetingDAO {
 	 * @throws SQLException
 	 */
 	public ArrayList<Meeting> findMeetingsByUser(int idUser) throws SQLException{
-		String query = "SELECT title, date, time, duration, maxParticipant, isCreator FROM participation NATURAL JOIN meeting WHERE idMeeting = ?";
+		String query = "SELECT title, date, time, duration, maxParticipant, isCreator FROM participation NATURAL JOIN meeting WHERE idUser = ?";
 		try(PreparedStatement pstatement = con.prepareStatement(query);){
 			pstatement.setInt(1, idUser);
 			try(ResultSet result = pstatement.executeQuery();){
@@ -32,7 +32,7 @@ public class MeetingDAO {
 				while(result.next()) {
 					Meeting m = new Meeting();
 					
-					m.setIdMeeting(idUser);
+
 					m.setTitle(result.getString("title"));
 					m.setDate(result.getDate("date"));
 					m.setTime(result.getTime("time"));
@@ -57,7 +57,7 @@ public class MeetingDAO {
 		try(PreparedStatement pstatement = con.prepareStatement(query);){
 			pstatement.setString(1, meeting.getTitle());
 			pstatement.setObject(2, meeting.getDate().toInstant().atZone(ZoneId.of("Europe/Rome")).toLocalDate());
-			pstatement.setTime(3, meeting.getTime());//non sono sicuro che funzioni
+			pstatement.setTime(3, meeting.getTime());
 			pstatement.setInt(4, meeting.getDuration());
 			pstatement.setInt(5, meeting.getMaxParticipant());
 			
