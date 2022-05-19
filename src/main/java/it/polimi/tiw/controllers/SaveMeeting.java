@@ -15,8 +15,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
@@ -53,14 +51,7 @@ public class SaveMeeting extends HttpServlet {
     
 	
 
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		HttpSession session = request.getSession();
-		String loginPath = getServletContext().getContextPath() + "/loginPage.html";
-		if (session.isNew() || session.getAttribute("user") == null) {
-			response.sendRedirect(loginPath);
-			return;
-		}
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		String title = request.getParameter("title");
 		String dateString = request.getParameter("date");
 		String timeString = request.getParameter("time");

@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Enumeration;
-
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -50,16 +48,9 @@ public class CreateMeeting extends HttpServlet {
     
 	
 	
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// If the user is not logged in (not present in session), redirect to the login
-		HttpSession session = request.getSession();
-		String loginPath = getServletContext().getContextPath() + "/loginPage.html";
-		if (session.isNew() || session.getAttribute("user") == null) {
-			response.sendRedirect(loginPath);
-			return;
-		}	
-		
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 		// retrieve data of meeting from session
+		HttpSession session = request.getSession();
 		String anagraphicPath = getServletContext().getContextPath() + "/anagraphicPage.html";
 		if (session.isNew() || session.getAttribute("meetingForm") == null) {
 			response.sendRedirect(anagraphicPath);
@@ -90,7 +81,6 @@ public class CreateMeeting extends HttpServlet {
 		}
 		
 		//saving creator of that meeting
-		//if the user has registered, it has not the id
 		User creator = (User) session.getAttribute("user");
 		int idUserCreator = creator.getIdUser();
 		try {

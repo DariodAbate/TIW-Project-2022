@@ -21,8 +21,6 @@ import org.thymeleaf.templatemode.TemplateMode;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 
 import it.polimi.tiw.beans.Meeting;
-import it.polimi.tiw.beans.User;
-import it.polimi.tiw.dao.UserDAO;
 import it.polimi.tiw.utils.ConnectionHandler;
 
 /**
@@ -56,14 +54,6 @@ public class CheckNumInvitation extends HttpServlet {
 	
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// If the user is not logged in (not present in session), redirect to the login
-		HttpSession session = request.getSession();
-		String loginPath = getServletContext().getContextPath() + "loginPage.html";
-		if (session.isNew() || session.getAttribute("user") == null) {
-			response.sendRedirect(loginPath);
-			return;
-		};
-		
 		//parsing user from checkbox
 		ArrayList<Integer> userList = new ArrayList<>();
 		Enumeration<String> selectedUser = request.getParameterNames();
@@ -83,30 +73,16 @@ public class CheckNumInvitation extends HttpServlet {
 		//not enough selection
 		String path;
 		if(userList.isEmpty()) {//not enough selection
-			
-			User user = (User) request.getSession().getAttribute("user");
-			UserDAO userDAO = new UserDAO(connection);
-			ArrayList<User> usersInvitable = new ArrayList<>();
-			
-			try {
-				String usernameCreator = user.getUsername();
-				usersInvitable = userDAO.findUsersExceptCreator(usernameCreator);
-			}catch(SQLException e) {
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot get users list");
-				return;
-			}
-			
-			path = "/WEB-INF/anagraphicPage.html";
+			request.setAttribute("emptySelection", "Please select at least one user!");
 			ServletContext servletContext = getServletContext();
-			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariable("notEnoughSelection", "Please select at least one user!");
-			ctx.setVariable("userListInvitable", usersInvitable);
-			templateEngine.process(path, ctx, response.getWriter());
+			RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/GetRegisteredUser");
+			requestDispatcher.forward(request,response);
 			return;
 		}
 		
 		
 		//retrieve max participant from session
+		HttpSession session = request.getSession();
 		String anagraphicPath = getServletContext().getContextPath() + "/anagraphicPage.html";
 		if(session.isNew() || session.getAttribute("meetingForm") == null) {
 			response.sendRedirect(anagraphicPath);
@@ -140,28 +116,12 @@ public class CheckNumInvitation extends HttpServlet {
 					return;
 				}
 			}
-			
-			//preparating last selected checkboxes
-			User user = (User) request.getSession().getAttribute("user");
-			UserDAO userDAO = new UserDAO(connection);
-			ArrayList<User> usersInvitable = new ArrayList<>();
-			
-			try {
-				String usernameCreator = user.getUsername();
-				usersInvitable = userDAO.findUsersExceptCreator(usernameCreator);
-			}catch(SQLException e) {
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot get users list");
-				return;
-			}
-			
-			path = "/WEB-INF/anagraphicPage.html";
+				
+			request.setAttribute("oversizeSelection", "Too many selected users, delete at least "+ (userList.size() - maxParticipant) +" !");
+			request.setAttribute("previousChoice", userList);
 			ServletContext servletContext = getServletContext();
-			final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
-			ctx.setVariable("TooMuchSelection", "Too many selected users, delete at least "+ (userList.size() - maxParticipant) +" !");
-			ctx.setVariable("userListInvitable", usersInvitable);
-			ctx.setVariable("userPreviouslySelected", userList);
-			templateEngine.process(path, ctx, response.getWriter());
-			
+			RequestDispatcher requestDispatcher = servletContext.getRequestDispatcher("/GetRegisteredUser");
+			requestDispatcher.forward(request,response);
 			return;
 		}
 		

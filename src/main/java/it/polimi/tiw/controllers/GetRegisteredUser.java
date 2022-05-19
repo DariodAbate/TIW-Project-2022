@@ -10,8 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.WebContext;
 import org.thymeleaf.templatemode.TemplateMode;
@@ -48,14 +46,7 @@ public class GetRegisteredUser extends HttpServlet {
     }
 
 
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// If the user is not logged in (not present in session), redirect to the login
-		HttpSession session = request.getSession();
-		String loginPath = getServletContext().getContextPath() + "/loginPage.html";
-		if (session.isNew() || session.getAttribute("user") == null) {
-			response.sendRedirect(loginPath);
-			return;
-		}	
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {	
 		User user = (User) request.getSession().getAttribute("user");
 		
 		
@@ -74,8 +65,26 @@ public class GetRegisteredUser extends HttpServlet {
 		ServletContext servletContext = getServletContext();
 		final WebContext ctx = new WebContext(request, response, servletContext, request.getLocale());
 		ctx.setVariable("userListInvitable", usersInvitable);
+		
+		if(request.getAttribute("emptySelection") != null) {//error message that comes from CheckNumInvitation
+			ctx.setVariable("notEnoughSelection", request.getAttribute("emptySelection"));
+		}
+		
+		if(request.getAttribute("oversizeSelection") != null) {//error message that comes from CheckNumInvitation
+			ctx.setVariable("TooMuchSelection", request.getAttribute("oversizeSelection"));
+		}
+		
+		if(request.getAttribute("previousChoice") != null) {//error message that comes from CheckNumInvitation
+			ctx.setVariable("userPreviouslySelected", request.getAttribute("previousChoice"));
+		}
+		
 		templateEngine.process(path, ctx, response.getWriter());
 	
+	}
+	
+
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		doGet(request, response);
 	}
 
 
