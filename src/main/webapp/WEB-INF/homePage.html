@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
+<link rel="stylesheet" type="text/css" href="MyFile.css">
 <meta charset="ISO-8859-1">
 <title>Home page</title>
 </head>
 <body>
-	<h3>Home page</h3>
+	<h3 id = "home">Home page</h3>
 	
 	<h4>Meetings created by you</h4>
 	<table bgcolor="black">
@@ -34,7 +35,7 @@
 		</tbody>
 	</table>
 	
-	<h3>Meetings you have been invited to</h4>
+	<h4>Meetings you have been invited to</h4>
 	<table bgcolor="black">
 		<thead>
 			<tr bgcolor="grey">
@@ -61,14 +62,14 @@
 		</tbody>
 	</table>
 	
-	<h3>Create a meeting</h3>
+	<h4>Create a meeting</h4>
 
 	<form method="post" th:action="@{/SaveMeeting}">
-		<br> Title: <input name="title" type="text" required>
-		<br> Date: <input name="date" type="date" required> 
-		<br> Time: <input name="time" type="time" required>
-		<br> Duration: <input name="duration" type="number" required>
-		<br> Max participant: <input name="maxPart" type="number" required>
+		<br> <input name="title" type="text" required placeholder = "Title">
+		<br> <input name="date" type="date" required placeholder = "Date"> 
+		<br> <input name="time" type="time" required placeholder = "Time">
+		<br> <input name="duration" type="number" required placeholder = "Duration">
+		<br> <input name="maxPart" type="number" required placeholder = "Max participant">
 		<br> <input type="submit" value="create">
 	</form>
 
