@@ -8,7 +8,6 @@ This folder contains the version of the pure html project, in another there will
 
 ## Languages
 - Java Enterprise Edition
-- Thymeleaf templating
 - HTML
 - CSS
 - Javascript
