@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.time.ZoneId;
 import java.util.ArrayList;
 
@@ -50,11 +51,12 @@ public class MeetingDAO {
 	/**
 	 * This method is used to insert the information about a meeting in the db
 	 * @param meeting meeting beans that contains all the information
+	 * @return the auto-generated key associated to the meeting created
 	 * @throws SQLException
 	 */
-	public void createMeeting(Meeting meeting) throws SQLException {
+	private int createMeeting(Meeting meeting) throws SQLException {
 		String query = "INSERT into `meeting` (`title`, `date`, `time`, `duration`, `maxParticipant`) VALUES (?, ?, ?, ?, ?)";
-		try(PreparedStatement pstatement = con.prepareStatement(query);){
+		try(PreparedStatement pstatement = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);){
 			pstatement.setString(1, meeting.getTitle());
 			pstatement.setObject(2, meeting.getDate().toInstant().atZone(ZoneId.of("Europe/Rome")).toLocalDate());
 			pstatement.setTime(3, meeting.getTime());
@@ -62,31 +64,27 @@ public class MeetingDAO {
 			pstatement.setInt(5, meeting.getMaxParticipant());
 			
 			pstatement.executeUpdate();
+			
+			//get the auto generated key
+			ResultSet generatedKeys = pstatement.getGeneratedKeys();
+			if(generatedKeys.next()) {
+				return generatedKeys.getInt(1);
+			}else {
+				throw new SQLException("Creating meeting failes, no ID obtained");
+			}
 		}
 	}
-
-	
 
 	/**
 	 * This method will be invoked as many times as the number of user that participate to a mission; it will
 	 * insert them into the database, distinguishing between a creator and a guest
 	 * @param idUser id of the user that participate to a meeeting
+	 * @param idMeeting id of the meeting in which the user partecipates
 	 * @param creator true if the user inserted is the creator of this meeting, false if it is a guest
 	 * @throws SQLException
 	 */
-	public void createParticipant(int idUser, boolean creator) throws SQLException {
+	private void createParticipant(int idUser, int idMeeting, boolean creator) throws SQLException {
 		String query = "INSERT into `participation` (`idUser`, `idMeeting`, `isCreator`) VALUES (?, ?, ?)";
-		int idMeeting;
-		// since "idMeeting" in "meeting" is auto incremented and the meeting is inserted  before invoking this method, just find the
-		// maximum value of the key "idMeeting" from the table "meeting"
-		try {
-			idMeeting = findLatestIdMeeting();
-			if(idMeeting == -1)
-				throw new SQLException("Latest idMeeting does not exists");
-		}catch(SQLException e) {
-			throw new SQLException(e.getMessage());
-		}
-		
 		try(PreparedStatement pstatement = con.prepareStatement(query);){
 			pstatement.setInt(1, idUser);
 			pstatement.setInt(2, idMeeting);
@@ -97,23 +95,28 @@ public class MeetingDAO {
 	}
 	
 	/**
-	 * This method is invoked when we have to find the latest idMeeting inserted in table "meeting", since it is auto incremented 
-	 * @return latest id inserted in the table "meeting"
+	 * This method is used to create a new meeting and to invite the the selected users to it.
+	 * If one of the interaction with the database fails, roll back all the works
+	 * @param meeting meeting that will be created
+	 * @param idCreator id of the user that created the meeting
+	 * @param idUsersInvited list of id of the users that has been invited
 	 * @throws SQLException
 	 */
-	private int findLatestIdMeeting() throws SQLException{ 	//this method will be invoked every time after create meeting
-		String query = "SELECT idMeeting FROM  meeting WHERE idMeeting = (SELECT MAX(idMeeting) FROM meeting)";
-		try(PreparedStatement pstatement = con.prepareStatement(query);){
-			try(ResultSet result = pstatement.executeQuery();){
-				if(!result.isBeforeFirst()) //error when created meeting
-					return -1;
-				else {
-					result.next();//only one id
-					int maxId = result.getInt("idMeeting");
-					return maxId;
-				}
-			}
+	public void createMeetingWithParticipants(Meeting meeting, int idCreator, ArrayList<Integer> idUsersInvited) throws SQLException{
+		con.setAutoCommit(false);//delimit of transaction
+		try {
+			int generatedIdMeeting = createMeeting(meeting);
+			//saving creator of the meeting
+			createParticipant(idCreator, generatedIdMeeting, true);
+			//saving participant of the meeting
+			for(int idUser: idUsersInvited) 	
+				createParticipant(idUser, generatedIdMeeting, false);
+			con.commit();
+			
+		}catch(SQLException e) {//if one of the updates fails, roll back all the work
+			con.rollback();
+			throw e;
 		}
 	}
-	
+		
 }

@@ -57,40 +57,29 @@ public class CreateMeeting extends HttpServlet {
 			return;
 		}	
 			
+		//Get meeting information from session
 		MeetingDAO meetingDAO = new MeetingDAO(connection);
-		//saving meeting
 		Meeting savedMeeting = (Meeting) session.getAttribute("meetingForm");
 		session.removeAttribute("meetingForm");
-		try {
-			meetingDAO.createMeeting(savedMeeting);
-		}catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot save the meeting");
-			return;
-		}
 		
-		//saving participating of that meeting
+		//Get participant from the request
 		ArrayList<Integer> userList = (ArrayList<Integer>) request.getAttribute("invitedPeople");
 		if(userList == null) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot save the participant for a meeting");
 			return;
 		}
 		
-		for(int idUser: userList) {
-			try {
-				meetingDAO.createParticipant(idUser, false);
-			}catch(SQLException e) {
-				response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot save the participant for a meeting");
-				return;
-			}
-		}
-		
-		//saving creator of that meeting
+		//Get creator of the meeting
 		User creator = (User) session.getAttribute("user");
 		int idUserCreator = creator.getIdUser();
+		
+		//create the meeting
 		try {
-			meetingDAO.createParticipant(idUserCreator, true);
+			meetingDAO.createMeetingWithParticipants(savedMeeting, idUserCreator, userList);
 		}catch(SQLException e) {
-			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot save the participant for a meeting");
+			e.printStackTrace();
+			
+			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot create a new meeting");
 			return;
 		}
 		
