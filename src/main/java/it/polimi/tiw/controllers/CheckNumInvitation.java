@@ -81,7 +81,7 @@ public class CheckNumInvitation extends HttpServlet {
 		}
 		
 		
-		//retrieve max participant from session
+		//retrieve meeting.maxParticipant from session
 		HttpSession session = request.getSession();
 		String anagraphicPath = getServletContext().getContextPath() + "/anagraphicPage.html";
 		if(session.isNew() || session.getAttribute("meetingForm") == null) {

@@ -74,15 +74,15 @@ public class CheckRegistration extends HttpServlet {
 		
 		UserDAO userDAO = new UserDAO(connection);
 		
-		ArrayList<User> registeredUser = new ArrayList<>();
+		ArrayList<User> registeredUsers = new ArrayList<>();
 		try {
-			registeredUser = userDAO.findAllUsers();
+			registeredUsers = userDAO.findAllUsers();
 		}catch(SQLException e) {
 			response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "Cannot check the username");
 			return;
 		}
 		
-		for(User regUser: registeredUser) {//checking unicity of nickname
+		for(User regUser: registeredUsers) {//checking unicity of nickname
 			if(regUser.getUsername().equals(usr)) {
 				path = "/loginPage.html";
 				ServletContext servletContext = getServletContext();
