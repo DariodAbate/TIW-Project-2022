@@ -7,7 +7,7 @@ public class Meeting {
 	private int idMeeting;
 	private String title;
 	private Date date;
-	private Time time; //TODO capire se cambiare questo tipo per renderlo compatibile con Time di mysql
+	private Time time; 
 	private int duration;
 	private int maxParticipant;
 	private boolean creator;
