@@ -1,5 +1,5 @@
 # TIW Project
-<p>Official repository for web technologies exam; the course has been held atPolytechnic University of Milan by Prof. Piero Fraternali in the academic year 2021-2022.</p>
+<p>Official repository for web technologies exam; the course has been held at Polytechnic University of Milan by Prof. Piero Fraternali in the academic year 2021-2022.</p>
 <p>Note that there are two different versions for this project, the other one can be found <a href="https://github.com/DariodAbate/TIW-Project-RIA-2022">here</a>.</p>
 <b>Final score: 28/30 </b>
 
