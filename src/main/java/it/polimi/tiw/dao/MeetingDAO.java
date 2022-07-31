@@ -25,7 +25,8 @@ public class MeetingDAO {
 	 * @throws SQLException
 	 */
 	public ArrayList<Meeting> findMeetingsByUser(int idUser) throws SQLException{
-		String query = "SELECT title, date, time, duration, maxParticipant, isCreator FROM participation NATURAL JOIN meeting WHERE idUser = ?";
+		String query = "SELECT title, date, time, duration, maxParticipant, isCreator FROM participation NATURAL JOIN meeting "
+				+ "WHERE idUser = ? AND date > current_date() OR date = current_date() AND time > current_time()";
 		try(PreparedStatement pstatement = con.prepareStatement(query);){
 			pstatement.setInt(1, idUser);
 			try(ResultSet result = pstatement.executeQuery();){
