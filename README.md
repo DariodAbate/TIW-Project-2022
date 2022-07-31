@@ -13,6 +13,8 @@
 - Java Enterprise Edition
 - Thymeleaf templating
 - MySQL Workbench
+- HTML
+- CSS
 
 ## The Team
 
