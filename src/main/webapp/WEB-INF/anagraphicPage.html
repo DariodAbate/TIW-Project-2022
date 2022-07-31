@@ -8,7 +8,6 @@
 <body>
 	<h3 id = "anagraphic"> Anagraphic page</h3>
 	<h3 id = "choose"> Choose the users to invite</h3>
-	</p>
 	<div>
 		<form method="post" th:action="@{/CheckNumInvitation}">
 			<div th:each="user : ${userListInvitable}">
@@ -20,16 +19,6 @@
 		</form>
 		<p th:text = "${notEnoughSelection}"> </p>
 		<p th:text = "${TooMuchSelection}"> </p>
-		<!--
-		#lists.contains(#session.getAttribute('oldSelection'), user)
-		
-		--->
-		
 	</div>
-
-
-
-
-
 </body>
 </html>

@@ -9,9 +9,9 @@
 	<h3 id = "home">Home page</h3>
 	
 	<h4>Meetings created by you</h4>
-	<table bgcolor="black">
+	<table>
 		<thead>
-			<tr bgcolor="grey">
+			<tr>
 				<th>Title</th>
 				<th>Date</th>
 				<th>Time</th>
@@ -36,9 +36,9 @@
 	</table>
 	
 	<h4>Meetings you have been invited to</h4>
-	<table bgcolor="black">
+	<table>
 		<thead>
-			<tr bgcolor="grey">
+			<tr>
 				<th>Title</th>
 				<th>Date</th>
 				<th>Time</th>
@@ -66,10 +66,10 @@
 
 	<form method="post" th:action="@{/SaveMeeting}">
 		<br> <input name="title" type="text" required placeholder = "Title">
-		<br> <input name="date" type="date" required placeholder = "Date"> 
+		<br> <input name="date" type="date" th:attr="min=${#dates.format(#dates.createNow(), 'yyyy-MM-dd')}" required placeholder = "Date"> 
 		<br> <input name="time" type="time" required placeholder = "Time">
-		<br> <input name="duration" type="number" required placeholder = "Duration">
-		<br> <input name="maxPart" type="number" required placeholder = "Max participant">
+		<br> <input name="duration" type="number" min="1" required placeholder = "Duration">
+		<br> <input name="maxPart" type="number" min="1" required placeholder = "Max participant">
 		<br> <input type="submit" value="create">
 	</form>
 
